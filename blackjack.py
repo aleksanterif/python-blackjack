@@ -25,10 +25,34 @@ class Card:
     def __str__(self):
         return self.suit + ' of ' + self.rank
 
-test = Card( 'Ace', 'Spades' )
-print(test)
+
 # I need a deck class inwhich I can store my cards accordignly 
+class Deck:
+    #It doesnt take any parameters in here to prevent the user from adding any cheats
+    def __init__(self):
+        self.deck = []  #initial state is that its created as an empty array
+        for suit in suits: #suits can be used here since its a global variable
+            for rank in ranks:
+                self.deck.append(Card(suit,rank)) #with this we can append (add) cards to a deck
+        # __str__ is used to create the string output we need
+    def __str__(self):
+        complete_deck = ''  # initial state is again an empty string
+        for card in self.deck:
+            complete_deck += '\n '+card.__str__() # with this we can print out every card in the deck
+        return 'In this deck is:' + '\n ' + complete_deck
+
 # I need a function to deal the cards
+    def deal(self):
+        one_card = self.deck.pop() #grab the deck attribute and pop a card item (single card from that list). Pop method removes the item at the given index from the list and returns the removed item.
+        return one_card
+                
+    def shuffle(self):
+        random.shuffle(self.deck) #with random we are able to shuffle the cards to get mixed results from which to pull single cards
+        
+
+test = Deck()
+test.shuffle()
+print(test)
 # Other funcion to display the delt cards
 # separate delt cards to dealers and players
 
