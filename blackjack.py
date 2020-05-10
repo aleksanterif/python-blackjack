@@ -4,6 +4,20 @@ import random
 # We should be able to tell if the user is playing
 userPlaying = True
 
+#In an ideal world, player could place a bet thats going to be written in a bet amount txt file.
+
+class Bet:
+    def __init__(self, amount=200, bet):
+        self.amount = amount    #defining of the amount and bet might be better for the user to decide?
+        self.bet = 50
+
+    def game_lost(self):
+        self.total -= self.bet
+        
+    def game_won(self):
+        self.total += self.bet
+    
+
 #lets see if we can just use one hand and then just define it to all participant players
 class Hand:
     # The self keyword gives us the access for the attributes and methods of the class
@@ -12,7 +26,7 @@ class Hand:
         self.aces_total = 0    # value of aces can be 1 or 11 so we need to keep track of those
         self.card_value = 0   # initial value of cards combined is 0 and we need to remove 10 from it if the amount from getting aces goes higher than 21
     
-    def add_card(self,card):
+    def add_card(self,card):    #with card passed here they can append it to their hand
         self.cards.append(card) #with this we can append (add) single card to players hand
         self.card_value += values[card.rank]    #we increase the value with the value set to each rank
         if card.rank == 'Ace':
@@ -80,4 +94,3 @@ print(player1.card_value)
 
 #display winner and ask if the player wants to keep playing
 
-#In an ideal world, player could place a bet thats going to be written in a bet amount txt file.
