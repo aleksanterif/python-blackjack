@@ -1,13 +1,27 @@
 #random will offer me a great way to randomly select cards and shuffle deck
 import random
 
- # Players hand is an empty array in the beginning
-player_hand = []
- # Dealers hand is an empty array in the beginning
-dealer_hand = []
-
 # We should be able to tell if the user is playing
 userPlaying = True
+
+#lets see if we can just use one hand and then just define it to all participant players
+class Hand:
+    # The self keyword gives us the access for the attributes and methods of the class
+    def __init__(self):
+        self.cards = []  # initial state is that its created as an empty array
+        self.aces_total = 0    # value of aces can be 1 or 11 so we need to keep track of those
+        self.card_value = 0   # initial value of cards combined is 0 and we need to remove 10 from it if the amount from getting aces goes higher than 21
+    
+    def add_card(self,card):
+        self.cards.append(card) #with this we can append (add) single card to players hand
+        self.card_value += values[card.rank]    #we increase the value with the value set to each rank
+        if card.rank == 'Ace':
+            self.aces_total += 1  # we need to make sure that player even has aces to build our logic around that
+    
+    def reset_ace_value(self):
+        while self.aces_total > 0 and self.card_value > 21:
+            self.card_value -= 10 #we remove 10 from value if there are any aces and the hand goes over 21
+
 
 # object in which I define the values of the cards
 suits = ('Spades','Diamonds', 'Clubs', 'Hearts')
@@ -33,7 +47,7 @@ class Deck:
         self.deck = []  #initial state is that its created as an empty array
         for suit in suits: #suits can be used here since its a global variable
             for rank in ranks:
-                self.deck.append(Card(suit,rank)) #with this we can append (add) cards to a deck
+                self.deck.append(Card(suit,rank)) #with this we can append (add) cards to a deck. Self.deck is a list of card objects
         # __str__ is used to create the string output we need
     def __str__(self):
         complete_deck = ''  # initial state is again an empty string
@@ -49,10 +63,15 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.deck) #with random we are able to shuffle the cards to get mixed results from which to pull single cards
         
+new_deck = Deck()
+new_deck.shuffle()
 
-test = Deck()
-test.shuffle()
-print(test)
+player1 = Hand()
+card_from_deck = new_deck.deal()
+print(card_from_deck)
+player1.add_card(card_from_deck)
+print(player1.card_value)
+
 # Other funcion to display the delt cards
 # separate delt cards to dealers and players
 
