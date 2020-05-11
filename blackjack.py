@@ -7,15 +7,26 @@ userPlaying = True
 #In an ideal world, player could place a bet thats going to be written in a bet amount txt file.
 
 class Bet:
-    def __init__(self, amount=200, bet):
-        self.amount = amount    #defining of the amount and bet might be better for the user to decide?
-        self.bet = 50
+    def __init__(self):
+        self.betValue = 0
+        self.amount = 500    #defining of the amount and bet might be better for the user to decide?
 
     def game_lost(self):
-        self.total -= self.bet
+        self.amount -= self.betValue
         
     def game_won(self):
-        self.total += self.bet
+        self.amount += self.betValue
+
+#We need a function to take bet from the user
+
+def select_bet_amount(bet):
+    while True:
+        bet.betValue = int(input("How much do you want to bet this time? "))
+        if bet.betValue > bet.amount:
+            print("you dont have that many much credit, your credit value currently is " + str(bet.amount))
+        else:
+            break
+
     
 
 #lets see if we can just use one hand and then just define it to all participant players
@@ -77,14 +88,29 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.deck) #with random we are able to shuffle the cards to get mixed results from which to pull single cards
         
+def give_card(deck,hand): #I need to be able to give out single cards so this will help me
+    hand.add_card(deck.deal())
+
+def take_card_or_not(deck,hand):    #With this we will know if the player wants to receive more cards
+    while True:
+        enteredValue = input('Do you wish to take more cards? Enter yes or no: ') 
+        if enteredValue == 'yes':
+            give_card(deck,hand)
+            print('player took a card, his cards value is now: ' + str(hand.card_value))
+        elif enteredValue == 'no':
+            print('player stopped taking cards, his cards value is now: ' + str(hand.card_value))
+            break
+        else:
+            print('You didnt answer the question correctly')
+
 new_deck = Deck()
 new_deck.shuffle()
-
+bet = Bet()
 player1 = Hand()
-card_from_deck = new_deck.deal()
-print(card_from_deck)
-player1.add_card(card_from_deck)
+select_bet_amount(bet)
+give_card(new_deck, player1)
 print(player1.card_value)
+take_card_or_not(new_deck, player1)
 
 # Other funcion to display the delt cards
 # separate delt cards to dealers and players
