@@ -103,6 +103,23 @@ def take_card_or_not(deck,hand):    #With this we will know if the player wants 
         else:
             print('You didnt answer the question correctly')
 
+def player_loses(player, bet)
+    print("player loses")
+    bet.game_lost()
+
+def dealer_loses(player, bet)
+    print("dealer loses, player wins")
+    bet.game_won()
+
+def player_wins(player, bet)
+    print("player wins")
+    bet.game_won()
+
+def dealer_wins(player, bet)
+    print("dealer wins, sorry player")
+    bet.game_lost()
+
+
 new_deck = Deck()
 new_deck.shuffle()
 bet = Bet()
