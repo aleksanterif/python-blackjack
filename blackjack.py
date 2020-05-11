@@ -4,7 +4,6 @@ import random
 # We should be able to tell if the user is playing
 userPlaying = True
 
-#In an ideal world, player could place a bet thats going to be written in a bet amount txt file.
 
 class Bet:
     def __init__(self):
@@ -92,48 +91,94 @@ def give_card(deck,hand): #I need to be able to give out single cards so this wi
     hand.add_card(deck.deal())
 
 def take_card_or_not(deck,hand):    #With this we will know if the player wants to receive more cards
+    global userPlaying
+
     while True:
         enteredValue = input('Do you wish to take more cards? Enter yes or no: ') 
         if enteredValue == 'yes':
             give_card(deck,hand)
             print('player took a card, his cards value is now: ' + str(hand.card_value))
         elif enteredValue == 'no':
-            print('player stopped taking cards, his cards value is now: ' + str(hand.card_value))
-            break
+            userPlaying = False
         else:
             print('You didnt answer the question correctly')
+        break   #fixed an infinite loop
 
-def player_loses(player, bet)
-    print("player loses")
+def player_loses(bet):
+    print("player went over, dealer wins")
     bet.game_lost()
 
-def dealer_loses(player, bet)
-    print("dealer loses, player wins")
+def dealer_loses(bet):
+    print("dealer went over, player wins")
     bet.game_won()
 
-def player_wins(player, bet)
-    print("player wins")
+def player_wins(bet):
+    print("player wins, with better value on their cards")
     bet.game_won()
 
-def dealer_wins(player, bet)
+def dealer_wins(bet):
     print("dealer wins, sorry player")
     bet.game_lost()
 
 
-new_deck = Deck()
-new_deck.shuffle()
-bet = Bet()
-player1 = Hand()
-select_bet_amount(bet)
-give_card(new_deck, player1)
-print(player1.card_value)
-take_card_or_not(new_deck, player1)
+while True:
+    print("You have started an game of blackjack, against the most devious computer ever to exist, yours! The rules are simple, you should beat dealers hand without going over 21, face cards are worth 10, aces are 1 or 11 based on your hand value ")
+    
+    # Game starts with an normal deck that gets shuffled 
+    new_deck = Deck()
+    new_deck.shuffle()
 
-# Other funcion to display the delt cards
-# separate delt cards to dealers and players
+    #when the player enters the game, his bet is going to be taken
+    players_chips = Bet()
 
-# increase the sum of players cards
-# increase the sum of dealers cards
+    select_bet_amount(players_chips)
 
-#display winner and ask if the player wants to keep playing
+    #after that, each players and dealers hands are initialized and they are both given two random cards
+    player_cards = Hand()
+    player_cards.add_card(new_deck.deal())
+    player_cards.add_card(new_deck.deal())
 
+    dealer_cards = Hand()
+    dealer_cards.add_card(new_deck.deal())
+    dealer_cards.add_card(new_deck.deal())
+
+    #dealers other card is not shown so the player doesnt see it
+    print("Players cards:", *player_cards.cards, sep = ", ")
+    print("Players card value =", player_cards.card_value)
+    print("Dealers card:", dealer_cards.cards[0], ", the other card if facing down")
+
+    while userPlaying:
+        take_card_or_not(new_deck,player_cards)
+        if player_cards.card_value > 21:
+            player_loses(players_chips)
+            break
+
+    if player_cards.card_value <= 21:
+
+        while dealer_cards.card_value < 17:
+            give_card(new_deck, dealer_cards)
+
+        if dealer_cards.card_value > 21:
+            dealer_loses(players_chips)
+        elif player_cards.card_value > dealer_cards.card_value:
+            player_wins(players_chips)
+        elif player_cards.card_value < dealer_cards.card_value:
+            dealer_wins(players_chips)
+        elif dealer_cards.card_value == 21:
+            dealer_wins(players_chips)
+        else:
+            dealer_wins(players_chips)      #in a tie, house always wins (learned this in real life)
+
+    print("Players cards:", *player_cards.cards, sep = ", ")
+    print("Players card value =", player_cards.card_value)
+    print("Dealers card:", *dealer_cards.cards, sep = ", ")
+    print("Players card value =", dealer_cards.card_value)
+
+
+
+    print("players balance currently is: ", players_chips.amount)
+    start_again = input('Do you want to play more blackjack? Enter yes to continue or quit by pressing enter \n ')
+    if start_again == 'yes':
+        continue
+    else:
+        break
