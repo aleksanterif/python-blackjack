@@ -172,13 +172,14 @@ while True:
     print("Players cards:", *player_cards.cards, sep = ", ")
     print("Players card value =", player_cards.card_value)
     print("Dealers card:", *dealer_cards.cards, sep = ", ")
-    print("Players card value =", dealer_cards.card_value)
+    print("Dealers card value =", dealer_cards.card_value)
 
 
 
     print("players balance currently is: ", players_chips.amount)
     start_again = input('Do you want to play more blackjack? Enter yes to continue or quit by pressing enter \n ')
     if start_again == 'yes':
+        userPlaying=True
         continue
     else:
         break
